@@ -57,21 +57,20 @@ const SubscriptionCard = ({ name, price, currency, icon, billing, color, categor
                                     ellipsizeMode='tail'>{formatSubscriptionDateTime(renewalDate)}</Text>
                             </View>
                         </View>
-                            </View>
-                        </View>
+                    </View>
 
-                        <View className='sub-row'>
-                            <View className='sub-row-copy'>
-                                <Text className='sub-label'>Status:</Text>
-                                <Text className='sub-value' numberOfLines={1}
-                                    ellipsizeMode='tail'>{status ? formatStatusLabel(status) : ''}</Text>
-                            </View>
+                    <View className='sub-row'>
+                        <View className='sub-row-copy'>
+                            <Text className='sub-label'>Status:</Text>
+                            <Text className='sub-value' numberOfLines={1}
+                                ellipsizeMode='tail'>{status ? formatStatusLabel(status) : ''}</Text>
                         </View>
                     </View>
                 </View>
-            )}
+            )
+            }
 
-        </Pressable>
+        </Pressable >
     )
 }
 
