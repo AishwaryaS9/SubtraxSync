@@ -54,7 +54,9 @@ const SubscriptionCard = ({ name, price, currency, icon, billing, color, categor
                             <View className='sub-row-copy'>
                                 <Text className='sub-label'>Renewal Date:</Text>
                                 <Text className='sub-value' numberOfLines={1}
-                                    ellipsizeMode='tail'>{renewalDate?.trim()}</Text>
+                                    ellipsizeMode='tail'>{formatSubscriptionDateTime(renewalDate)}</Text>
+                            </View>
+                        </View>
                             </View>
                         </View>
 
