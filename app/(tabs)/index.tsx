@@ -10,7 +10,7 @@ import { styled } from "nativewind";
 import { useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
-import '../global.css';
+import '../../global.css';
 
 const SafeAreaView = styled(RNSafeAreaView);
 
