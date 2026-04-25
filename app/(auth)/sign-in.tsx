@@ -130,6 +130,12 @@ const SignIn = () => {
                                         'auth-button-disabled'}`}
                                         onPress={handleVerify}
                                         disabled={!code || fetchStatus === 'fetching'}>
+                                        <Text className='auth-button-text'>Verify Code</Text>
+                                    </Pressable>
+
+                                    <Pressable className='auth-secondary-button'
+                                        onPress={() => signIn.mfa.sendEmailCode()}
+                                        disabled={fetchStatus === 'fetching'}>
                                         <Text className='auth-secondary-button-text'>Resend Code</Text>
                                     </Pressable>
 
