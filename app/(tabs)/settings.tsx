@@ -2,7 +2,7 @@ import images from "@/constants/images";
 import { useClerk, useUser } from "@clerk/expo";
 import { styled } from "nativewind";
 import React from 'react';
-import { Image, Pressable, Text, View } from "react-native";
+import { Alert, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
@@ -12,7 +12,12 @@ const Settings = () => {
     const { user } = useUser();
 
     const handleSignOut = async () => {
-        await signOut();
+        try {
+            await signOut();
+        } catch (error) {
+            console.error('Sign-out failed:', error);
+            Alert.alert("Sign out failed", "Please try again.");
+        }
     }
 
     const displayName = user?.firstName || user?.fullName || user?.emailAddresses[0]?.emailAddress || 'User';

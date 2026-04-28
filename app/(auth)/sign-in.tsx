@@ -1,6 +1,7 @@
 import { useSignIn } from '@clerk/expo';
 import { Href, Link, useRouter } from 'expo-router';
 import { styled } from 'nativewind';
+import { usePostHog } from 'posthog-react-native';
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +11,8 @@ const SafeAreaView = styled(RNSafeAreaView);
 const SignIn = () => {
     const { signIn, errors, fetchStatus } = useSignIn();
     const router = useRouter();
+
+    const posthog = usePostHog();
 
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
@@ -22,6 +25,29 @@ const SignIn = () => {
     const passwordValid = password.length > 0;
     const formValid = emailAddress.length > 0 && password.length > 0 && emailValid;
 
+    const hasEmailCodeFactor = signIn.supportedSecondFactors?.some((factor) =>
+        factor.strategy === 'email_code'
+    ) ?? false;
+
+    const secondFactor = signIn.supportedSecondFactors?.find((factor) =>
+        ['email_code', 'phone_code', 'totp'].includes(factor.strategy)
+    );
+
+    const verificationSubtitle = secondFactor?.strategy === 'phone_code'
+        ? 'We sent a verification code to your phone'
+        : secondFactor?.strategy === 'totp'
+            ? 'Enter the verification code from your authenticator app'
+            : 'We sent a verification code to your email';
+
+    const handleSendEmailCode = async () => {
+        if (!hasEmailCodeFactor) {
+            console.warn('Email code is not supported for this second-factor flow.');
+            return;
+        }
+
+        await signIn.mfa.sendEmailCode();
+    };
+
     const handleSubmit = async () => {
         if (!formValid) return;
 
@@ -32,26 +58,41 @@ const SignIn = () => {
 
         if (error) {
             console.error(JSON.stringify(error, null, 2));
+            posthog.capture('user_sign_in_failed', {
+                error_message: error.message,
+            });
             return;
         }
 
         if (signIn.status === 'complete') {
+
             await signIn.finalize({
                 navigate: ({ session, decorateUrl }) => {
                     if (session?.currentTask) {
                         console.log(session?.currentTask);
                         return;
                     }
-                    const url = decorateUrl('/(tabs)');
+                    posthog.identify(emailAddress, {
+                        $set: { email: emailAddress },
+                        $set_once: { first_sign_in_date: new Date().toISOString() },
+                    });
+                    posthog.capture('user_signed_in', { email: emailAddress });
+
+                    const url = decorateUrl('/');
                     if (url.startsWith('http')) {
-                        window.location.href = url;
+                        if (typeof window !== 'undefined' && window.location) {
+                            window.location.href = url;
+                        } else {
+                            router.replace('/' as Href);
+                        }
                     } else {
                         router.replace(url as Href);
                     }
                 },
             });
+            posthog.identify(emailAddress);
         } else if (signIn.status === 'needs_second_factor') {
-            console.log('MFA required');
+            await handleSendEmailCode();
         } else if (signIn.status === 'needs_client_trust') {
             const emailCodeFactor = signIn.supportedSecondFactors.find((factor) =>
                 factor.strategy === 'email_code');
@@ -72,9 +113,20 @@ const SignIn = () => {
                         console.log(session?.currentTask);
                         return;
                     }
-                    const url = decorateUrl('/(tabs)');
+
+                    posthog.identify(emailAddress, {
+                        $set: { email: emailAddress },
+                        $set_once: { first_sign_in_date: new Date().toISOString() },
+                    });
+                    posthog.capture('user_signed_in', { email: emailAddress });
+
+                    const url = decorateUrl('/');
                     if (url.startsWith('http')) {
-                        window.location.href = url;
+                        if (typeof window !== 'undefined' && window.location) {
+                            window.location.href = url;
+                        } else {
+                            router.replace('/' as Href);
+                        }
                     } else {
                         router.replace(url as Href);
                     }
@@ -86,7 +138,7 @@ const SignIn = () => {
     }
 
 
-    if (signIn.status === 'needs_client_trust') {
+    if (signIn.status === 'needs_client_trust' || signIn.status === 'needs_second_factor') {
         return (
             <SafeAreaView className='auth-safe-area'>
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -107,7 +159,7 @@ const SignIn = () => {
                                     </View>
                                 </View>
                                 <Text className='auth-title'>Verify your identity</Text>
-                                <Text className='auth-subtitle'>We sent a verification code to your email</Text>
+                                <Text className='auth-subtitle'>{verificationSubtitle}</Text>
                             </View>
 
                             {/* Verification Form */}
@@ -134,7 +186,7 @@ const SignIn = () => {
                                     </Pressable>
 
                                     <Pressable className='auth-secondary-button'
-                                        onPress={() => signIn.mfa.sendEmailCode()}
+                                        onPress={handleSendEmailCode}
                                         disabled={fetchStatus === 'fetching'}>
                                         <Text className='auth-secondary-button-text'>Resend Code</Text>
                                     </Pressable>
@@ -257,3 +309,6 @@ const SignIn = () => {
 }
 
 export default SignIn
+
+
+
