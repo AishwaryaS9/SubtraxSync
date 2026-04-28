@@ -66,7 +66,8 @@ export default function CreateSubscriptionModal({
         if (!validateForm()) return;
 
         const startDate = dayjs().toISOString();
-        const renewalDate = dayjs().add(frequency === "Monthly" ? 1 : 12, frequency === "Monthly" ? "month" : "year").toISOString();
+        const renewalDate = dayjs().add(1, frequency === "Monthly" ? "month" : "year").toISOString();
+
 
         const subscription: Subscription = {
             id: `${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`,

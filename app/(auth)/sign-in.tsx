@@ -25,6 +25,29 @@ const SignIn = () => {
     const passwordValid = password.length > 0;
     const formValid = emailAddress.length > 0 && password.length > 0 && emailValid;
 
+    const hasEmailCodeFactor = signIn.supportedSecondFactors?.some((factor) =>
+        factor.strategy === 'email_code'
+    ) ?? false;
+
+    const secondFactor = signIn.supportedSecondFactors?.find((factor) =>
+        ['email_code', 'phone_code', 'totp'].includes(factor.strategy)
+    );
+
+    const verificationSubtitle = secondFactor?.strategy === 'phone_code'
+        ? 'We sent a verification code to your phone'
+        : secondFactor?.strategy === 'totp'
+            ? 'Enter the verification code from your authenticator app'
+            : 'We sent a verification code to your email';
+
+    const handleSendEmailCode = async () => {
+        if (!hasEmailCodeFactor) {
+            console.warn('Email code is not supported for this second-factor flow.');
+            return;
+        }
+
+        await signIn.mfa.sendEmailCode();
+    };
+
     const handleSubmit = async () => {
         if (!formValid) return;
 
@@ -69,7 +92,7 @@ const SignIn = () => {
             });
             posthog.identify(emailAddress);
         } else if (signIn.status === 'needs_second_factor') {
-            await signIn.mfa.sendEmailCode();
+            await handleSendEmailCode();
         } else if (signIn.status === 'needs_client_trust') {
             const emailCodeFactor = signIn.supportedSecondFactors.find((factor) =>
                 factor.strategy === 'email_code');
@@ -136,7 +159,7 @@ const SignIn = () => {
                                     </View>
                                 </View>
                                 <Text className='auth-title'>Verify your identity</Text>
-                                <Text className='auth-subtitle'>We sent a verification code to your email</Text>
+                                <Text className='auth-subtitle'>{verificationSubtitle}</Text>
                             </View>
 
                             {/* Verification Form */}
@@ -163,7 +186,7 @@ const SignIn = () => {
                                     </Pressable>
 
                                     <Pressable className='auth-secondary-button'
-                                        onPress={() => signIn.mfa.sendEmailCode()}
+                                        onPress={handleSendEmailCode}
                                         disabled={fetchStatus === 'fetching'}>
                                         <Text className='auth-secondary-button-text'>Resend Code</Text>
                                     </Pressable>

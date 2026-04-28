@@ -18,7 +18,7 @@ export const SubscriptionsProvider: React.FC<{ children: React.ReactNode }> = ({
     );
 
     const addSubscription = (subscription: Subscription) => {
-        setSubscriptions([subscription, ...subscriptions]);
+        setSubscriptions((prev) => [subscription, ...prev]);
     };
 
     return (
