@@ -24,6 +24,7 @@ declare global {
         price: number;
         currency?: string;
         billing: string;
+        frequency?: string;
         renewalDate?: string;
         color?: string;
     }
@@ -45,11 +46,17 @@ declare global {
     }
 
     interface UpcomingSubscriptionCardProps
-        extends Omit<UpcomingSubscription, "id"> {}
+        extends Omit<UpcomingSubscription, "id"> { }
 
     interface ListHeadingProps {
         title: string;
     }
+
+    interface CreateSubscriptionModalProps {
+        visible: boolean;
+        onClose: () => void;
+        onSubmit: (subscription: Subscription) => void;
+    }
 }
 
-export {};
+export { };

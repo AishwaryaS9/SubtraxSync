@@ -1,3 +1,4 @@
+import { SubscriptionsProvider } from '@/context/SubscriptionsContext';
 import '@/global.css';
 import { ClerkProvider, useAuth } from '@clerk/expo';
 import { tokenCache } from '@clerk/expo/token-cache';
@@ -66,7 +67,9 @@ export default function RootLayout() {
       }}
     >
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <RootLayoutContent />
+        <SubscriptionsProvider>
+          <RootLayoutContent />
+        </SubscriptionsProvider>
       </ClerkProvider>
     </PostHogProvider>
   )
