@@ -12,7 +12,11 @@ const Settings = () => {
     const { user } = useUser();
 
     const handleSignOut = async () => {
-        await signOut();
+        try {
+            await signOut();
+        } catch (error) {
+            console.error('Sign-out failed:', error);
+        }
     }
 
     const displayName = user?.firstName || user?.fullName || user?.emailAddresses[0]?.emailAddress || 'User';
