@@ -1,4 +1,5 @@
 import { icons } from "@/constants/icons";
+import { posthog } from "@/src/config/posthog";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -53,8 +54,9 @@ export default function CreateSubscriptionModal({
             newErrors.name = "Name is required";
         }
 
-        const priceNum = parseFloat(price);
-        if (!price || isNaN(priceNum) || priceNum <= 0) {
+        const normalizedPrice = price.trim();
+        const priceNum = Number(normalizedPrice);
+        if (!normalizedPrice || !Number.isFinite(priceNum) || priceNum <= 0) {
             newErrors.price = "Price must be a positive number";
         }
 
@@ -67,7 +69,6 @@ export default function CreateSubscriptionModal({
 
         const startDate = dayjs().toISOString();
         const renewalDate = dayjs().add(1, frequency === "Monthly" ? "month" : "year").toISOString();
-
 
         const subscription: Subscription = {
             id: `${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`,
@@ -85,8 +86,14 @@ export default function CreateSubscriptionModal({
         };
 
         onSubmit(subscription);
+        posthog.capture('subscription_created', {
+            subscription_name: name.trim(),
+            subscription_price: price,
+            subscription_frequency: frequency,
+            subscription_category: category,
+        })
         resetForm();
-        onClose();
+        handleClose();
     };
 
     const resetForm = () => {
@@ -99,16 +106,21 @@ export default function CreateSubscriptionModal({
 
     const isFormValid =
         name.trim().length > 0 &&
-        price &&
-        !isNaN(parseFloat(price)) &&
-        parseFloat(price) > 0;
+        price.trim().length > 0 &&
+        Number.isFinite(Number(price.trim())) &&
+        Number(price.trim()) > 0;
+
+    const handleClose = () => {
+        resetForm();
+        onClose();
+    };
 
     return (
         <Modal
             visible={visible}
             animationType="slide"
             transparent
-            onRequestClose={onClose}
+            onRequestClose={handleClose}
         >
             <View className="flex-1 bg-black/50 justify-end">
                 <KeyboardAvoidingView
@@ -117,8 +129,8 @@ export default function CreateSubscriptionModal({
                 >
                     <View className="modal-header">
                         <Text className="modal-title">New Subscription</Text>
-                        <Pressable className="modal-close" onPress={onClose}>
-                            <Text className="modal-close-text">×</Text>
+                        <Pressable className="modal-close" onPress={handleClose}>
+                            <Text className="modal-close-text">X</Text>
                         </Pressable>
                     </View>
 
