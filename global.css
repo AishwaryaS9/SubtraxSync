@@ -198,6 +198,10 @@
         @apply flex-row items-center justify-between gap-3;
     }
 
+    .sub-detail-row {
+        @apply items-start gap-3;
+    }
+
     .sub-row-copy {
         @apply min-w-0 flex-1 flex-row items-center gap-2;
     }
@@ -210,8 +214,24 @@
         @apply flex-1 font-sans-bold text-primary;
     }
 
+    .sub-actions {
+        @apply mt-3 flex-row items-center gap-3;
+    }
+
+    .sub-action-button {
+        @apply flex-1 items-center rounded-full border border-black/10 bg-white px-4 py-3;
+    }
+
+    .sub-action-secondary {
+        @apply bg-background;
+    }
+
+    .sub-action-button-text {
+        @apply text-sm font-sans-semibold text-primary;
+    }
+
     .sub-cancel {
-        @apply mt-2 items-center rounded-full bg-primary py-4;
+        @apply mt-4 items-center rounded-full bg-primary py-4;
     }
 
     .sub-cancel-disabled {
@@ -220,6 +240,142 @@
 
     .sub-cancel-text {
         @apply font-sans-bold text-background;
+    }
+
+    .insights-header {
+        @apply mb-4 flex-row items-center justify-between;
+    }
+
+    .insights-title {
+        @apply text-xl font-sans-bold text-primary;
+    }
+
+    .insights-icon-btn {
+        @apply h-12 w-12 items-center justify-center rounded-2xl border border-black/10 bg-card;
+    }
+
+    .insights-icon {
+        @apply size-6;
+    }
+
+    .insights-section {
+        @apply mb-5;
+    }
+
+    .insights-chart-item {
+        @apply flex-1 items-center;
+    }
+
+    .insights-chart-bar-wrapper {
+        @apply h-56 justify-end rounded-full bg-muted px-1;
+    }
+
+    .insights-chart-card {
+        @apply rounded-3xl bg-accent/10 p-6;
+    }
+
+    .insights-chart-y-axis {
+        @apply justify-between py-1 pr-2 mb-8;
+    }
+
+    .insights-chart-y-label {
+        @apply text-xs font-sans-bold text-primary/50;
+    }
+
+    .insights-chart-grid-lines {
+        @apply absolute inset-x-0 top-0 h-[80%] mt-2;
+    }
+
+    .insights-chart-grid-line {
+        @apply absolute left-0 right-0 h-px border-b border-dashed border-gray-400;
+    }
+
+    .insights-chart-grid {
+        @apply relative flex-row items-end justify-between pt-2;
+    }
+
+    .insights-chart-bar {
+        @apply w-3 rounded-full bg-primary mb-2;
+    }
+
+    .insights-chart-bar-highlighted {
+        @apply bg-accent;
+    }
+
+    .insights-chart-badge {
+        @apply absolute -top-10 z-10 rounded-xl bg-white px-2 py-1 shadow-sm;
+    }
+
+    .insights-chart-badge-text {
+        @apply text-[9px] font-sans-bold text-accent;
+    }
+
+    .insights-chart-badge-arrow {
+        @apply absolute -bottom-1 left-1/2 -ml-1 h-2 w-2 rotate-45 bg-white;
+    }
+
+    .insights-chart-label {
+        @apply mt-4 text-xs font-sans-bold text-primary/50;
+    }
+
+    .insights-summary-card {
+        @apply my-3 rounded-3xl border border-gray-400 bg-white p-6 flex flex-row items-center justify-between;
+    }
+
+    .insights-summary-label {
+        @apply text-base font-sans-bold text-muted-foreground mb-2;
+    }
+
+    .insights-summary-subtitle {
+        @apply mt-1 text-sm font-sans-bold text-primary/80;
+    }
+
+    .insights-summary-value {
+        @apply text-3xl font-sans-extrabold text-primary;
+    }
+
+    .insights-summary-change {
+        @apply mt-1 text-base font-sans-bold text-accent;
+    }
+
+    .insights-history-card {
+        @apply mt-4 rounded-3xl p-5 shadow-sm;
+    }
+
+    .history-card-main {
+        @apply flex-row items-center justify-between gap-3;
+    }
+
+    .history-icon-container {
+        @apply items-center justify-center rounded-2xl bg-white/80 p-3;
+    }
+
+    .history-icon {
+        @apply size-10;
+    }
+
+    .history-copy {
+        @apply min-w-0 flex-1;
+    }
+
+    .history-name {
+        @apply text-lg font-sans-bold text-primary;
+    }
+
+    .history-detail {
+        @apply mt-1 text-sm font-sans-medium text-primary/70;
+    }
+
+    .history-price-block {
+        @apply items-end;
+    }
+
+    .history-price {
+        @apply text-2xl font-sans-extrabold text-primary;
+    }
+
+    .history-frequency {
+        @apply text-sm font-sans-medium text-primary/70;
     }
 
     .home-empty-state {
