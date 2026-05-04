@@ -110,7 +110,7 @@ export const chartBars = [
     { label: 'Mon', value: 35 },
     { label: 'Tue', value: 28 },
     { label: 'Wed', value: 22 },
-    { label: 'Thr', value: 40, highlighted: true },
+    { label: 'Thu', value: 40, highlighted: true },
     { label: 'Fri', value: 32 },
     { label: 'Sat', value: 24 },
     { label: 'Sun', value: 26 },
