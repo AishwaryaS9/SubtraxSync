@@ -25,50 +25,62 @@ const SubscriptionCard = ({ name, price, currency, icon, billing, color, categor
 
             {expanded && (
                 <View className='sub-body'>
-                    <View className='sub-details'>
-                        <View className='sub-row'>
-                            <View className='sub-row-copy'>
-                                <Text className='sub-label'>Payment:</Text>
-                                <Text className='sub-value' numberOfLines={1}
-                                    ellipsizeMode='tail'>{paymentMethod?.trim() ?? 'Not provided'}</Text>
-                            </View>
-                        </View>
-
-                        <View className='sub-row'>
-                            <View className='sub-row-copy'>
-                                <Text className='sub-label'>Category:</Text>
-                                <Text className='sub-value' numberOfLines={1}
-                                    ellipsizeMode='tail'>{(category?.trim() || plan?.trim()) ?? 'Not provided'}</Text>
-                            </View>
-                        </View>
-
-                        <View className='sub-row'>
-                            <View className='sub-row-copy'>
-                                <Text className='sub-label'>Started:</Text>
-                                <Text className='sub-value' numberOfLines={1}
-                                    ellipsizeMode='tail'>{startDate ? formatSubscriptionDateTime(startDate) : 'Not provided'}</Text>
-                            </View>
-                        </View>
-
-                        <View className='sub-row'>
-                            <View className='sub-row-copy'>
-                                <Text className='sub-label'>Renewal Date:</Text>
-                                <Text className='sub-value' numberOfLines={1}
-                                    ellipsizeMode='tail'>{renewalDate ? formatSubscriptionDateTime(renewalDate) : 'Not provided'}</Text>
-                            </View>
+                    <View className='sub-row sub-detail-row'>
+                        <View className='sub-row-copy'>
+                            <Text className='sub-label'>Payment info:</Text>
+                            <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
+                                {paymentMethod?.trim() ? paymentMethod.trim() : 'Not provided'}
+                            </Text>
                         </View>
                     </View>
 
-                    <View className='sub-row'>
+                    <View className='sub-actions'>
+                        <Pressable className='sub-action-button' onPress={() => { }}>
+                            <Text className='sub-action-button-text'>Manage</Text>
+                        </Pressable>
+                        <Pressable className='sub-action-button sub-action-secondary' onPress={() => { }}>
+                            <Text className='sub-action-button-text'>Change</Text>
+                        </Pressable>
+                    </View>
+
+                    <View className='sub-row sub-detail-row'>
+                        <View className='sub-row-copy'>
+                            <Text className='sub-label'>Plan details:</Text>
+                            <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
+                                {(plan?.trim() || category?.trim()) ? (plan?.trim() || category?.trim()) : 'Not provided'}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View className='sub-row sub-detail-row'>
+                        <View className='sub-row-copy'>
+                            <Text className='sub-label'>Started:</Text>
+                            <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
+                                {startDate ? formatSubscriptionDateTime(startDate) : 'Not provided'}
+                            </Text>
+                        </View>
+                        <View className='sub-row-copy'>
+                            <Text className='sub-label'>Renewal Date:</Text>
+                            <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
+                                {renewalDate ? formatSubscriptionDateTime(renewalDate) : 'Not provided'}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View className='sub-row sub-detail-row'>
                         <View className='sub-row-copy'>
                             <Text className='sub-label'>Status:</Text>
-                            <Text className='sub-value' numberOfLines={1}
-                                ellipsizeMode='tail'>{status ? formatStatusLabel(status) : 'Not provided'}</Text>
+                            <Text className='sub-value' numberOfLines={1} ellipsizeMode='tail'>
+                                {status ? formatStatusLabel(status) : 'Not provided'}
+                            </Text>
                         </View>
                     </View>
+
+                    <Pressable className='sub-cancel' onPress={() => { }}>
+                        <Text className='sub-cancel-text'>Cancel Subscription</Text>
+                    </Pressable>
                 </View>
-            )
-            }
+            )}
 
         </Pressable >
     )

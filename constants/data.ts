@@ -8,7 +8,7 @@ export const tabs: AppTab[] = [
 ];
 
 export const HOME_USER = {
-    name: "Aishwarya S",
+    name: "Ashith",
 };
 
 export const HOME_BALANCE = {
@@ -105,3 +105,34 @@ export const HOME_SUBSCRIPTIONS: Subscription[] = [
         color: "#b8e8d0",
     },
 ];
+
+export const chartBars = [
+    { label: 'Mon', value: 35 },
+    { label: 'Tue', value: 28 },
+    { label: 'Wed', value: 22 },
+    { label: 'Thu', value: 40, highlighted: true },
+    { label: 'Fri', value: 32 },
+    { label: 'Sat', value: 24 },
+    { label: 'Sun', value: 26 },
+]
+
+export const historyItems = [
+    {
+        id: 'claude',
+        icon: icons.claude,
+        name: 'Claude',
+        detail: 'June 25, 12:00',
+        price: '$9.84',
+        frequency: 'per month',
+        bgColor: '#b8d4e3',
+    },
+    {
+        id: 'canva',
+        icon: icons.canva,
+        name: 'Canva',
+        detail: 'June 30, 16:00',
+        price: '$43.89',
+        frequency: 'per month',
+        bgColor: '#b8e8d0',
+    },
+]

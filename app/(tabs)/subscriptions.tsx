@@ -9,6 +9,7 @@ const SafeAreaView = styled(RNSafeAreaView);
 
 const Subscriptions = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null);
     const { subscriptions } = useSubscriptions();
 
     const filteredSubscriptions = useMemo(() => {
@@ -26,11 +27,10 @@ const Subscriptions = () => {
         <View className='mb-4'>
             <SubscriptionCard
                 {...item}
-                expanded={false}
-                onPress={() => {
-                    // TODO: Navigate to subscription detail
-                    console.log('Pressed', item.id);
-                }}
+                expanded={expandedSubscriptionId === item.id}
+                onPress={() => setExpandedSubscriptionId((currentId) =>
+                    currentId === item.id ? null : item.id
+                )}
             />
         </View>
     );
